@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Générateur de mot de passe</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+    input[type=range] { width: 200px; }
+    .password-box { font-weight: bold; margin-top: 20px; font-size: 24px; }
+  </style>
+</head>
+<body>
+
+  <h1>🔐 Générateur de mot de passe</h1>
+
+  <label>Longueur : <span id="length-value">12</span></label><br>
+  <input type="range" min="4" max="32" value="12" id="length"><br><br>
+
+  <label><input type="checkbox" id="lowercase" checked> Minuscules</label><br>
+  <label><input type="checkbox" id="uppercase" checked> Majuscules</label><br>
+  <label><input type="checkbox" id="numbers" checked> Chiffres</label><br>
+  <label><input type="checkbox" id="symbols"> Symboles</label><br><br>
+
+  <button onclick="generatePassword()">Générer</button>
+
+  <div class="password-box" id="password">••••••••••••</div>
+  <button onclick="copyPassword()">Copier</button>
+
+  <script>
+    const lengthSlider = document.getElementById("length");
+    const lengthValue = document.getElementById("length-value");
+    const passwordBox = document.getElementById("password");
+
+    lengthSlider.oninput = () => {
+      lengthValue.textContent = lengthSlider.value;
+    };
+
+    function generatePassword() {
+      const lower = "abcdefghijklmnopqrstuvwxyz";
+      const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const numbers = "0123456789";
+      const symbols = "!@#$%^&*()_+[]{}|;:,.<>?";
+
+      let charset = "";
+      if (document.getElementById("lowercase").checked) charset += lower;
+      if (document.getElementById("uppercase").checked) charset += upper;
+      if (document.getElementById("numbers").checked) charset += numbers;
+      if (document.getElementById("symbols").checked) charset += symbols;
+
+      let password = "";
+      const length = parseInt(lengthSlider.value);
+      for (let i = 0; i < length; i++) {
+        password += charset.charAt(Math.floor(Math.random() * charset.length));
+      }
+
+      passwordBox.textContent = password;
+    }
+
+    function copyPassword() {
+      navigator.clipboard.writeText(passwordBox.textContent).then(() => {
+        alert("Mot de passe copié !");
+      });
+    }
+  </script>
+
+</body>
+</html>
